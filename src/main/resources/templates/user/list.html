@@ -16,6 +16,9 @@
             <th>性別</th>
             <th>年齢</th>
             <th>メールアドレス</th>
+            <!-- チャプター8で追記 -->
+            <th></th>
+            <!-- ここまで -->
         </tr>
         <tr th:each="user : ${userlist}">
             <td th:text="${user.id}"></td>
@@ -23,6 +26,11 @@
             <td th:text="${user.gender}"></td>
             <td th:text="${user.age}"></td>
             <td th:text="${user.email}"></td>
+            <!-- チャプター8で追記 -->
+            <td>
+                <a th:href="@{/user/update/{id}/(id=${user.id})}">更新</a>
+            </td>
+            <!-- チャプター8追記ここまで -->
         </tr>
     </table>
 </body>
