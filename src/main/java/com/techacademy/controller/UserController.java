@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.Set; // チャプター9で追加
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute; // チャプタ�
 import org.springframework.web.bind.annotation.PathVariable; // チャプター8で追加
 import org.springframework.web.bind.annotation.PostMapping; // チャプター7で追加
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam; // チャプター9で追加
 
 import com.techacademy.entity.User;
 import com.techacademy.service.UserService;
@@ -62,5 +65,14 @@ public class UserController {
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
-    // ---- チャプター8での追記ここまで
+    // ---- チャプター8での追記ここまで、以下チャプター9で追記 ----
+    /** User削除処理 */
+    @PostMapping(path="list", params="deleteRun")
+    public String deleteRun(@RequestParam(name="idck") Set<Integer> idck, Model model) {
+        // Userを一括削除
+        service.deleteUser(idck);
+        // 一覧画面にリダイレクト
+        return "redirect:/user/list";
+    }
+    // ---- チャプター9での追記ここまで ----
 }
