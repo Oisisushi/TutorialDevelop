@@ -7,8 +7,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
-// チャプター10で追加
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,7 +17,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
-// チャプター10追加ここまで
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.Data;
 
 @Data
@@ -56,5 +58,19 @@ public class User {
     @Email
     @Length(max=50)
     private String email;
+
+    // チャプター11で追加、セキュリティ関連、ここから
+    @OneToOne(mappedBy="user")
+    private Authentication authentication;
+
+    /** レコードが削除される前に行う処理 */
+    @PreRemove
+    @Transactional
+    private void preRemove() {
+        // 認証エンティティからuserを切り離す
+        if (authentication!=null) {
+            authentication.setUser(null);
+        }
+    }
 
 }
