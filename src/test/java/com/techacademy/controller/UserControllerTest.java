@@ -35,7 +35,7 @@ class UserControllerTest {
     }
 
     @BeforeEach
-    void veforeEach() {
+    void beforeEach() {
         // Spring Securityを有効にする
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
