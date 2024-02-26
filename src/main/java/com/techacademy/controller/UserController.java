@@ -57,13 +57,13 @@ public class UserController {
 
     @GetMapping("/update/{id}/")
     public String getUser(@PathVariable("id") Integer id, User user, Model model) {
-        // Modelに登録
+        // Modelに登録、postUserから遷移した場合はそのままuserを登録
         if (id == null) {
             model.addAttribute("user", user);
         } else {
-        model.addAttribute("user", service.getUser(id));
+            model.addAttribute("user", service.getUser(id));
         }
-        // User1更新画面に遷移
+        // User更新画面に遷移
         return "user/update";
     }
 
