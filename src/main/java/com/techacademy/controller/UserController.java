@@ -54,23 +54,34 @@ public class UserController {
     }
 
     /** User更新画面を表示 */
+
     @GetMapping("/update/{id}/")
-    public String getUser(@PathVariable("id") Integer id, Model model) {
+    public String getUser(@PathVariable("id") Integer id, User user, Model model) {
         // Modelに登録
+        if (id == null) {
+            model.addAttribute("user", user);
+        } else {
         model.addAttribute("user", service.getUser(id));
+        }
         // User1更新画面に遷移
         return "user/update";
     }
 
     /** User更新処理 */
+
     @PostMapping("/update/{id}/")
-    public String postUser(User user) {
+    public String postUser(@Validated User user, BindingResult res, Model model) {
+        if (res.hasErrors()) {
+            // エラーあり
+            return getUser(null, user, model);
+        }
         // User登録
         service.saveUser(user);
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
-    // ---- チャプター8での追記ここまで、以下チャプター9で追記 ----
+
+
     /** User削除処理 */
     @PostMapping(path="list", params="deleteRun")
     public String deleteRun(@RequestParam(name="idck") Set<Integer> idck, Model model) {
@@ -79,5 +90,4 @@ public class UserController {
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
-    // ---- チャプター9での追記ここまで ----
 }
