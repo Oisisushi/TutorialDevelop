@@ -1,11 +1,14 @@
 package com.techacademy.controller;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +62,37 @@ class UserControllerTest {
         User user = (User)result.getModelAndView().getModel().get("user");
         assertEquals(1, user.getId());
         assertEquals("キラメキ太郎", user.getName());
+    }
+
+    @Test
+    @DisplayName("User一覧画面")
+    @WithMockUser
+    void testGetList() throws Exception {
+        // HTTPリクエストに対するレスポンス検証
+        MvcResult result = mockMvc.perform(get("/user/list"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("userlist"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(view().name("user/list"))
+                .andReturn();
+
+        // userlistの検証、Modelからuserlistを取り出して件数を確認
+        @SuppressWarnings("unchecked")
+        List<User> userlist = (List<User>)result.getModelAndView().getModel().get("userlist");
+        assertEquals(3, userlist.size());
+
+        // userlistから1件ずつ取り出してidとnameを検証
+        User user = userlist.get(0);
+        assertEquals("キラメキ太郎", user.getName());
+        assertEquals(1, user.getId());
+
+        user = userlist.get(1);
+        assertEquals("キラメキ次郎", user.getName());
+        assertEquals(2, user.getId());
+
+        user = userlist.get(2);
+        assertEquals("キラメキ花子", user.getName());
+        assertEquals(3, user.getId());
     }
 
 }
